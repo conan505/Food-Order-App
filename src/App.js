@@ -7,7 +7,6 @@ function App() {
   const [showCart, setShowCart] = useState(false);
 
   const showCartHandler = () => {
-
     setShowCart(true);
   }
 
@@ -16,10 +15,10 @@ function App() {
   }
   return (
     <div>
-      <Header showCart={showCartHandler} />
+      <Header onShow={showCartHandler} />
       <main>
         <Meals />
-        <Cart onShow={showCart} closeCart={closeCartHandler} />
+        {showCart && <Cart closeCart={closeCartHandler} />}
       </main>
     </div>
   );
