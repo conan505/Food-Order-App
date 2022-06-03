@@ -16,8 +16,6 @@ function App() {
   }
   return (
     <CartProvider>
-
-      {console.log("hi")}
       <Header onShow={showCartHandler} />
       <main>
         <Meals />

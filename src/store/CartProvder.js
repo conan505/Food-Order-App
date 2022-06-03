@@ -1,34 +1,52 @@
-import { useState } from "react";
+import { useReducer } from "react";
 import CartContext from "./cart-context";
 
-const CartProvider = (props) => {
-    const [items, setItems] = useState([])
-    const [amount, setAmount] = useState(0);
+const cartReducer = (state, action) => {
+    if (action.type == 'ADD') {
 
-    const addItem = (item) => {
-        setItems((prevState) => {
-            return [...prevState, item];
+        const availableItem = state.items.filter((item) => {
+            return item.id == action.item.id;
         })
-        setAmount((prevState) => {
-            return prevState + item.price;
-        })
-    }
-    const removeItem = (item) => {
-        setItems((prevState) => {
-            return prevState.filter((meal) => {
-                return meal.id !== item.id;
+        if (availableItem.length === 0) {
+            const newItems = [...state.items, action.item];
+            return { ...state, items: newItems, totalAmount: state.totalAmount + (action.item.price * action.item.amount) };
+        }
+        else {
+            const newItems = state.items.map((item) => {
+                if (availableItem.id == item.id) {
+                    return { ...item, amount: item.amount + availableItem.amount };
+                }
+                else return { ...item };
             })
-        })
-        setAmount((prevState) => {
-            return prevState - item.price;
-        })
+            return { ...state, items: newItems, totalAmount: state.totalAmount + (action.item.price * action.item.amount) };
+        }
+    };
+
+}
+
+const cartInitialState = {
+    items: [],
+    totalAmount: 0
+}
+
+
+const CartProvider = (props) => {
+
+    const [cartState, dispatchCartAction] = useReducer(cartReducer, cartInitialState);
+
+    const addItemHandler = (item) => {
+        return dispatchCartAction({ type: 'ADD', item: item })
+
+    }
+    const removeItemHandler = (item) => {
+        return dispatchCartAction({ type: 'REMOVE', item: item })
     }
 
     return <CartContext.Provider value={{
-        items: items,
-        amount: amount,
-        addItem: addItem,
-        removeItem: removeItem
+        items: cartState.items,
+        totalAmount: cartState.totalAmount,
+        addItem: addItemHandler,
+        removeItem: removeItemHandler
     }}>
         {props.children}
     </CartContext.Provider>

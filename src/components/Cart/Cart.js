@@ -1,8 +1,8 @@
 import { useContext } from "react";
 import CartContext from "../../store/cart-context";
-import MealItem from "../Meals/MealItem/MealItem";
 import Modal from "../UI/Modal";
 import classes from "./Cart.module.css"
+import CartItem from "./CartItem";
 
 const Cart = (props) => {
     const ctx = useContext(CartContext);
@@ -14,17 +14,16 @@ const Cart = (props) => {
             console.log("hey", meal);
             return <ul>
 
-                <MealItem
-                    // key={meal.id}
+                <CartItem
+                    key={meal.id}
                     name={meal.name}
-                    description={meal.description}
+                    amount={meal.amount}
                     price={meal.price}
-
                 />
 
             </ul>
         })}
-        <div className={classes.total}>Amount ${ctx.amount}</div>
+        <div className={classes.total}>Amount ${ctx.totalAmount}</div>
         <div className={classes.actions}>
             <button onClick={props.closeCart} >Close</button>
             <button onClick={props.closeCart}>Order</button>
