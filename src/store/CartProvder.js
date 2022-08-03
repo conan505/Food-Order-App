@@ -9,7 +9,7 @@ const cartReducer = (state, action) => {
         })
         if (availableItem.length === 0) {
             const newItems = [...state.items, action.item];
-            return { ...state, items: newItems, totalAmount: updatedAmount  };
+            return { ...state, items: newItems, totalAmount: updatedAmount };
         }
         else {
             const newItems = state.items.map((item) => {
@@ -25,7 +25,7 @@ const cartReducer = (state, action) => {
         const removedItem = state.items.filter((item) => {
             return item.id === action.id;
         })
-        const updatedAmount = state.totalAmount - removedItem[0].price;
+        const updatedAmount = Math.abs(state.totalAmount - removedItem[0].price);
         const remainingItems = state.items.filter((item) => {
             return item.id !== action.id;
         })
@@ -55,7 +55,7 @@ const CartProvider = (props) => {
 
     }
     const removeItemHandler = (id) => {
-        return dispatchCartAction({ type: 'REMOVE', id : id })
+        return dispatchCartAction({ type: 'REMOVE', id: id })
     }
 
     return <CartContext.Provider value={{

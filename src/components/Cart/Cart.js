@@ -25,7 +25,7 @@ const Cart = (props) => {
                     name={item.name}
                     amount={item.amount}
                     price={item.price}
-                    onAdd={onAddCartItemHandler.bind(null, item)}
+                    onAdd={onAddCartItemHandler.bind(null, item)}  // we can also pass parameter via anonymous function
                     onRemove={onRemoveCartItemHandler.bind(null, item.id)}
                 />
             </ul>
